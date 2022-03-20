@@ -15,15 +15,17 @@ public class NewOrderMain {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         var producer = new KafkaProducer<String, String>(properties());
 
-        var key = UUID.randomUUID().toString();
-        var value = "123456,65321,11.00";
-        var email = "Obrigado! Nós processamos seu pedido!";
+        for (var i = 0; i < 100; i++){
+            var key = UUID.randomUUID().toString();
+            var value = "123456,65321,11.00";
+            var email = "Obrigado! Nós processamos seu pedido!";
 
-        var record = new ProducerRecord<String, String>("ECOMMERCE_NEW_ORDER", key, value);
-        var emailRecord = new ProducerRecord<String, String>("ECOMMERCE_SEND_EMAIL", key, email);
+            var record = new ProducerRecord<String, String>("ECOMMERCE_NEW_ORDER", key, value);
+            var emailRecord = new ProducerRecord<String, String>("ECOMMERCE_SEND_EMAIL", key, email);
 
-        producer.send(record, callback()).get();
-        producer.send(emailRecord, callback()).get();
+            producer.send(record, callback()).get();
+            producer.send(emailRecord, callback()).get();
+        }
     }
 
     private static Callback callback() {
